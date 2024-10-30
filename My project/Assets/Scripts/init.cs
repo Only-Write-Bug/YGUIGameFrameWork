@@ -7,7 +7,7 @@ public class init : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Logger.Save();
+        
     }
 
     // Update is called once per frame
