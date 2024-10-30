@@ -55,3 +55,4 @@ npm/
 
 # Serialized layouts (avoid pushing developer-specific layout files)
 *.wlt
+My project/In_Game/Log/
