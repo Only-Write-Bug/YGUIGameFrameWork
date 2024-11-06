@@ -56,3 +56,7 @@ npm/
 # Serialized layouts (avoid pushing developer-specific layout files)
 *.wlt
 My project/In_Game/Log/
+
+My project/UserSettings/Layouts/default-2022.dwlt
+
+*.meta
