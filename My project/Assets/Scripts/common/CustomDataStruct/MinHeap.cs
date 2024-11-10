@@ -57,7 +57,7 @@ namespace common.CustomDataStruct
             return _elements[0];
         }
 
-        public void Traverse()
+        public void Traverse(dynamic[] args)
         {
             var tempAry = new List<T>(_elements);
             tempAry.Sort();
@@ -66,7 +66,7 @@ namespace common.CustomDataStruct
             {
                 if (element == null)
                     break;
-                element.Work();
+                element.Work(args);
             }
         }
 

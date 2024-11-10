@@ -2,6 +2,6 @@
 {
     public interface IWork
     {
-        public void Work();
+        public void Work(dynamic[] args);
     }
 }

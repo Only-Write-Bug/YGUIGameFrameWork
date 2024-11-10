@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using common.CustomDataStruct;
 using common.EventCenter.Class;
+using Unity.VisualScripting;
 
 namespace common.EventCenter.Base
 {
@@ -17,10 +19,10 @@ namespace common.EventCenter.Base
         private MinHeap<Subscriber> _subscriberHeap = new MinHeap<Subscriber>();
         private Dictionary<long, Subscriber> _subscriberDic = new Dictionary<long, Subscriber>();
 
-        public long ApplySubscription(int priority)
+        public long ApplySubscription(int priority, Func<dynamic[], Null> callback)
         {
             var subscriptionAccount = _subscriptionAccountMechine++;
-            var subscriber = new Subscriber(subscriptionAccount, priority);
+            var subscriber = new Subscriber(subscriptionAccount, priority, callback);
             
             _subscriberHeap.Add(subscriber);
             _subscriberDic[subscriptionAccount] = subscriber;
