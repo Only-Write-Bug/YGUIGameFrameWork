@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using util;
 
 namespace Editor.Scripts
 {
@@ -16,6 +17,7 @@ namespace Editor.Scripts
     
     public class YGUISetting : EditorWindow
     {
+        private YGUISettingData _data = new YGUISettingData();
         [MenuItem("YGUI/Settings")]
         public static void OpenSettings()
         {
@@ -33,11 +35,13 @@ namespace Editor.Scripts
             return new Button(() =>
             {
                 Debug.Log("Save Settings");
+                SettingsUtil.SaveSettings(_data, ESettingsFilePath.YGUI);
             })
             {
                 text = "Save",
                 style =
                 {
+                    flexDirection = FlexDirection.Row,
                     width = Length.Percent(30),
                     height = 25
                 }
