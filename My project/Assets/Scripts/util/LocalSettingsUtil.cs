@@ -11,7 +11,7 @@ namespace util
         YGUI,
     }
 
-    public static class SettingsUtil
+    public static class LocalSettingsUtil
     {
         private static string root = Path.Combine(Directory.GetCurrentDirectory(), "Assets\\Settings");
 

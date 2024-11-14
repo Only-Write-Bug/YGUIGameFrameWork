@@ -35,7 +35,7 @@ namespace Editor.Scripts
             return new Button(() =>
             {
                 Debug.Log("Save Settings");
-                SettingsUtil.SaveSettings(_data, ESettingsFilePath.YGUI);
+                LocalSettingsUtil.SaveSettings(_data, ESettingsFilePath.YGUI);
             })
             {
                 text = "Save",

@@ -8,7 +8,7 @@ public class init : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SettingsUtil.SaveSettings(new {}, ESettingsFilePath.YGUI );
+        LocalSettingsUtil.SaveSettings(new {}, ESettingsFilePath.YGUI );
     }
 
     // Update is called once per frame
