@@ -8,9 +8,10 @@ using util;
 
 namespace Editor.Scripts
 {
+    [Serializable]
     public class YGUISettingData
     {
-        
+        public List<SerializableKVPair> labels = new List<SerializableKVPair>();
     }
     
     public class YGUISetting : EditorWindow
@@ -48,12 +49,14 @@ namespace Editor.Scripts
             assetsPathContainer.Add(CreateItemName("Assets Path:"));
             var label = new Label
             {
+                text = _data.labels.TryGetValue(SELECT_ASSET_FOLDER_PATH, out var assetPath) ? assetPath : null,
                 style = { fontSize = DEFAULT_ITEM_FONT_SIZE, }
             };
             assetsPathContainer.Add(label);
             assetsPathContainer.Add(CreateItemButton("Modify", () =>
             {
                 label.text = EditorUtility.OpenFolderPanel("select asset folder", "", "");
+                _data.labels.SetValue(SELECT_ASSET_FOLDER_PATH, label.text);
             }));
             container.Add(assetsPathContainer);
             
