@@ -6,6 +6,11 @@
     通过UI Toolkit编写的基于Unity编辑器的设置管理
     设置内容本地化存储
 
+## Prefab管理
+    使用Odin Serializer序列化和反序列化Prefab
+    Prefab数据化
+        导出Prefab后即时生效，只需要在游戏中重新生成预制体实例即可看到修改
+
 ## AssetBundleBuilder
 
 ## 游戏开发常用工具系统
