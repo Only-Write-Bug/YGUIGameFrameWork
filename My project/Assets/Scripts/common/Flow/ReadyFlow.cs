@@ -9,7 +9,7 @@ namespace common.Flow
     /// </summary>
     public class ReadyFlow : BaseFlow
     {
-        public EFinishResult Start(dynamic[] args = null)
+        public new EFinishResult Start(dynamic[] args = null)
         {
             if (steps.Count <= 0)
                 return EFinishResult.WARN;

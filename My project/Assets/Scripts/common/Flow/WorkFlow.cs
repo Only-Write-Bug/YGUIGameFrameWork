@@ -4,7 +4,7 @@ namespace common.Flow
 {
     public class WorkFlow : BaseFlow
     {
-        public EFinishResult Start(dynamic[] args)
+        public new EFinishResult Start(dynamic[] args)
         {
             if (steps.Count <= 0)
                 return EFinishResult.WARN;

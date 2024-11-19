@@ -8,16 +8,6 @@ namespace common.CustomDataStruct
     {
         public string key;
         public dynamic value;
-
-        public SerializableKVPair()
-        {
-        }
-
-        public SerializableKVPair(string key, dynamic value)
-        {
-            this.key = key;
-            this.value = value;
-        }
     }
 
     public static class SerializableKVPairFunc
@@ -48,7 +38,12 @@ namespace common.CustomDataStruct
                 }
             }
             
-            self.Add(new SerializableKVPair(key, value));
+            // self.Add(new SerializableKVPair(key, value));
+            self.Add(new SerializableKVPair
+            {
+                key = key,
+                value = value,
+            });
         }
     }
 }
