@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using common;
 using common.CustomDataStruct;
 using UnityEditor;
 using UnityEngine;
@@ -18,8 +19,6 @@ namespace Editor.Scripts
     {
         private const int DEFAULT_TITTLE_FONT_SIZE = 20;
         private const int DEFAULT_ITEM_FONT_SIZE = 15;
-
-        private const string SELECT_ASSET_FOLDER_PATH = "select_asset_folder_path";
         
         private YGUISettingData _data = LocalSettingsUtil.LoadSettings<YGUISettingData>(ESettingsFilePath.YGUI);
         
@@ -49,14 +48,14 @@ namespace Editor.Scripts
             assetsPathContainer.Add(CreateItemName("Assets Path:"));
             var label = new Label
             {
-                text = _data.labels.TryGetValue(SELECT_ASSET_FOLDER_PATH, out var assetPath) ? assetPath : null,
+                text = _data.labels.TryGetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, out var assetPath) ? assetPath : null,
                 style = { fontSize = DEFAULT_ITEM_FONT_SIZE, }
             };
             assetsPathContainer.Add(label);
             assetsPathContainer.Add(CreateItemButton("Modify", () =>
             {
                 label.text = EditorUtility.OpenFolderPanel("select asset folder", "", "");
-                _data.labels.SetValue(SELECT_ASSET_FOLDER_PATH, label.text);
+                _data.labels.SetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, label.text);
             }));
             container.Add(assetsPathContainer);
             
