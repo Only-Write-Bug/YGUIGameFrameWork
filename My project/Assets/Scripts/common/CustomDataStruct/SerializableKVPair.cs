@@ -7,14 +7,14 @@ namespace common.CustomDataStruct
     public class SerializableKVPair
     {
         public string key;
-        public dynamic value;
+        public string value;
     }
 
     public static class SerializableKVPairFunc
     {
-        public static bool TryGetValue(this List<SerializableKVPair> self, string key, out dynamic value)
+        public static bool TryGetValue(this List<SerializableKVPair> self, string key, out string value)
         {
-            value = default(dynamic);
+            value = "";
             foreach (var kv in self)
             {
                 if (kv.key == key)
@@ -27,7 +27,7 @@ namespace common.CustomDataStruct
             return false;
         }
 
-        public static void SetValue(this List<SerializableKVPair> self, string key, dynamic value)
+        public static void SetValue(this List<SerializableKVPair> self, string key, string value)
         {
             foreach (var kv in self)
             {

@@ -27,16 +27,16 @@ namespace util
         /// 保存设置文件，会覆盖原文件所有设置
         /// </summary>
         /// <param name="settings">要保存的设置对象</param>
-        /// <param name="path">设置文件路径</param>
-        public static void SaveSettings(object settings, ESettingsFilePath path)
+        /// <param name="key">设置文件路径</param>
+        public static void SaveSettings(object settings, ESettingsFilePath key)
         {
-            if (!SettingsPathDic.ContainsKey(path))
+            if (!SettingsPathDic.ContainsKey(key))
             {
-                Logger.Error("The default setting path is empty, please check the code, Expected target key : " + path);
+                Logger.Error("The default setting path is empty, please check the code, Expected target key : " + key);
                 return;
             }
 
-            var targetPath = Path.Combine(root, SettingsPathDic[path]) + ".json";
+            var targetPath = GenerateFilePath(key);
             PathUtil.CheckPath(root);
 
             try
@@ -58,18 +58,18 @@ namespace util
         /// <summary>
         /// 修改设置文件中的某个属性值
         /// </summary>
-        /// <param name="path">设置文件路径</param>
+        /// <param name="key">设置文件路径</param>
         /// <param name="propertyName">属性名</param>
         /// <param name="value">属性值</param>
-        public static void ModifySetting(ESettingsFilePath path, string propertyName, string value)
+        public static void ModifySetting(ESettingsFilePath key, string propertyName, string value)
         {
-            if (!SettingsPathDic.ContainsKey(path))
+            if (!SettingsPathDic.ContainsKey(key))
             {
-                Logger.Error("The default setting path is empty, please check the code, Expected target key : " + path);
+                Logger.Error("The default setting path is empty, please check the code, Expected target key : " + key);
                 return;
             }
 
-            var targetPath = Path.Combine(root, SettingsPathDic[path]) + ".json";
+            var targetPath = Path.Combine(root, SettingsPathDic[key]) + ".json";
             PathUtil.CheckPath(root);
 
             try
@@ -95,6 +95,30 @@ namespace util
             {
                 Logger.Error("Failed to modify setting: " + ex.Message);
             }
+        }
+
+        public static T LoadSettings<T>(ESettingsFilePath key) where T : class, new()
+        {
+            var targetPath = GenerateFilePath(key);
+            if (File.Exists(targetPath))
+            {
+                try
+                {
+                    var content = File.ReadAllText(targetPath);
+                    return JsonUtility.FromJson<T>(content);
+                }
+                catch (Exception ex)
+                {
+                    Logger.Error("Failed to load settings due to file sharing violation: " + ex.Message);
+                }
+            }
+            
+            return new T();
+        }
+
+        private static string GenerateFilePath(ESettingsFilePath key)
+        {
+            return Path.Combine(root, SettingsPathDic[key]) + ".json";
         }
     }
 }

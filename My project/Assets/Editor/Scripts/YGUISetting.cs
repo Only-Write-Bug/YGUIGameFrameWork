@@ -21,7 +21,7 @@ namespace Editor.Scripts
 
         private const string SELECT_ASSET_FOLDER_PATH = "select_asset_folder_path";
         
-        private YGUISettingData _data = new YGUISettingData();
+        private YGUISettingData _data = LocalSettingsUtil.LoadSettings<YGUISettingData>(ESettingsFilePath.YGUI);
         
         [MenuItem("YGUI/Settings")]
         public static void OpenSettings()
