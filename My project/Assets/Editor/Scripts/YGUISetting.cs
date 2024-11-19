@@ -76,6 +76,28 @@ namespace Editor.Scripts
             }));
             container.Add(assetBundlePathContainer);
             
+            //生成AB包按钮
+            container.Add(new Button(() =>
+            {
+                if (!string.IsNullOrEmpty(assetLabel.text))
+                {
+                    AssetBundleBuilder.GeneraAssetBundle(new string[]{assetLabel.text});
+                }
+                else
+                {
+                    Debug.LogWarning("The path of the asset to be generated for the AB package is not specified");
+                }
+            })
+            {
+                text = "Generate AB",
+                style =
+                {
+                    width = Length.Percent(50),
+                    height = 20,
+                    fontSize = DEFAULT_ITEM_FONT_SIZE
+                }
+            });
+            
             container.Add(CreateUnderLine());
             
             return container;

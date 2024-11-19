@@ -116,7 +116,7 @@ namespace util
             return new T();
         }
 
-        private static string GenerateFilePath(ESettingsFilePath key)
+        public static string GenerateFilePath(ESettingsFilePath key)
         {
             return Path.Combine(root, SettingsPathDic[key]) + ".json";
         }
