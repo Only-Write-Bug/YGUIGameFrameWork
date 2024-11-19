@@ -38,7 +38,6 @@ namespace common.CustomDataStruct
                 }
             }
             
-            // self.Add(new SerializableKVPair(key, value));
             self.Add(new SerializableKVPair
             {
                 key = key,
