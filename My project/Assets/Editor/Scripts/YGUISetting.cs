@@ -44,20 +44,37 @@ namespace Editor.Scripts
             
             container.Add(CreateTittle("AssetBundle Settings"));
 
+            //资产路径
             var assetsPathContainer = CreateContainer();
             assetsPathContainer.Add(CreateItemName("Assets Path:"));
-            var label = new Label
+            var assetLabel = new Label
             {
-                text = _data.labels.TryGetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, out var assetPath) ? assetPath : null,
+                text = _data.labels.TryGetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, out var assetPath) ? assetPath : "",
                 style = { fontSize = DEFAULT_ITEM_FONT_SIZE, }
             };
-            assetsPathContainer.Add(label);
+            assetsPathContainer.Add(assetLabel);
             assetsPathContainer.Add(CreateItemButton("Modify", () =>
             {
-                label.text = EditorUtility.OpenFolderPanel("select asset folder", "", "");
-                _data.labels.SetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, label.text);
+                assetLabel.text = EditorUtility.OpenFolderPanel("select asset folder", "", "");
+                _data.labels.SetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, assetLabel.text);
             }));
             container.Add(assetsPathContainer);
+            
+            //存储AB包路径
+            var assetBundlePathContainer = CreateContainer();
+            assetBundlePathContainer.Add(CreateItemName("AssetBundle Path:"));
+            var abLabel = new Label
+            {
+                text = _data.labels.TryGetValue(GlobalConstants.YGUI_ASSET_BUNDLE_PATH, out var abPath) ? abPath : "",
+                style = { fontSize = DEFAULT_ITEM_FONT_SIZE, }
+            };
+            assetBundlePathContainer.Add(abLabel);
+            assetBundlePathContainer.Add(CreateItemButton("Modify", () =>
+            {
+                abLabel.text = EditorUtility.OpenFolderPanel("select AssetBundle Save folder", "", "");
+                _data.labels.SetValue(GlobalConstants.YGUI_ASSET_BUNDLE_PATH, abLabel.text);
+            }));
+            container.Add(assetBundlePathContainer);
             
             container.Add(CreateUnderLine());
             
