@@ -40,7 +40,7 @@ public class Logger
 
     public static void Save()
     {
-        PathUtil.CheckPath(_defaultLogFilePath);
+        IOUtil.CheckPath(_defaultLogFilePath);
 
         var curTimeStamp = DateTimeUtil.GetTimestampByUtcTime(DateTime.UtcNow);
         var saveLogFileName = curTimeStamp + _defaultLogFileType;

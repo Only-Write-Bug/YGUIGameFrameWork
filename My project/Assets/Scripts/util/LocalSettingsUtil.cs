@@ -37,7 +37,7 @@ namespace util
             }
 
             var targetPath = GenerateFilePath(key);
-            PathUtil.CheckPath(root);
+            IOUtil.CheckPath(root);
 
             try
             {
@@ -70,7 +70,7 @@ namespace util
             }
 
             var targetPath = Path.Combine(root, SettingsPathDic[key]) + ".json";
-            PathUtil.CheckPath(root);
+            IOUtil.CheckPath(root);
 
             try
             {

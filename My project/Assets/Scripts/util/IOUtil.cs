@@ -2,7 +2,7 @@
 
 namespace util
 {
-    public class PathUtil
+    public class IOUtil
     {
         public static void CheckPath(string path)
         {
