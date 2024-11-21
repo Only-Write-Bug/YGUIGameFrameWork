@@ -2,6 +2,7 @@
 using GameFrame.YAssetManage.PrefabsManage;
 using UnityEditor;
 using UnityEngine;
+using util;
 
 namespace Editor.Scripts
 {
@@ -16,10 +17,14 @@ namespace Editor.Scripts
             {
                 var path = AssetDatabase.GetAssetPath(selectedObject);
 
-                Debug.Log(Path.GetExtension(path).ToLower());
                 if (!AssetDatabase.IsValidFolder(path) && Path.GetExtension(path).ToLower() == ".prefab")
                 {
                     var content = PrefabSerializer.Serialize(selectedObject as GameObject, path);
+                    AssetUtil.GenerateAssetKey(path);
+                }
+                else
+                {
+                    Debug.LogWarning("Export prefab failed, selected object is not prefab, path:" + path);
                 }
             }
         }
