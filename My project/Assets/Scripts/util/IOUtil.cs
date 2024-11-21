@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using UnityEngine;
 
 namespace util
 {
@@ -8,9 +10,78 @@ namespace util
         {
             if (!Directory.Exists(path))
             {
-                Logger.Log("PathUtil.CheckPath : Create directory");
-                Directory.CreateDirectory(path);
+                try
+                {
+                    Directory.CreateDirectory(path);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("Create Directory Failed, " + e.Message);
+                    throw;
+                }
             }
+        }
+
+        public static bool CheckFile(string path)
+        {
+            if (!File.Exists(path) && isPathValid(path))
+            {
+                try
+                {
+                    CheckPath(Path.GetDirectoryName(path));
+                    File.Create(path);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error("Create File Failed, " + e.Message);
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static void WriteContentToFile(string path, string content)
+        {
+            try
+            {
+                if (CheckFile(path))
+                {
+                    // File.WriteAllText(path, content);
+                    using (var stream = File.OpenWrite(path))
+                    {
+                        stream.SetLength(0);
+                        using (var write = new StreamWriter(stream))
+                        {
+                            write.Write(content);
+                            write.Close();
+                        }
+                        stream.Close();
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                Logger.Warn($"File access conflicts: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Warn($"There was an error writing to the file: {ex.Message}");
+            }
+        }
+
+        public static bool isPathValid(string path)
+        {
+            try
+            {
+                Path.GetFullPath(path);
+            }
+            catch (Exception e)
+            {
+                Logger.Warn(path + " is not valid, " + e.Message);
+                return false;
+            }
+            return true;
         }
     }
 }

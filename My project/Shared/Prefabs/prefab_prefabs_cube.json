@@ -1,0 +1,87 @@
+{
+    "$id": 0,
+    "$type": "0|GameFrame.YAssetManage.PrefabsManage.SerializablePrefab, Assembly-CSharp",
+    "prefabName": "Cube",
+    "prefabPath": "Assets/Prefabs/Cube.prefab",
+    "children": {
+        "$id": 1,
+        "$type": "1|System.Collections.Generic.List`1[[GameFrame.YAssetManage.PrefabsManage.SerializableGameObject, Assembly-CSharp]], mscorlib",
+        "$rlength": 1,
+        "$rcontent": [
+            {
+                "$id": 2,
+                "$type": "2|GameFrame.YAssetManage.PrefabsManage.SerializableGameObject, Assembly-CSharp",
+                "name": "Capsule",
+                "children": {
+                    "$id": 3,
+                    "$type": 1,
+                    "$rlength": 0,
+                    "$rcontent": [
+                    ]
+                },
+                "components": {
+                    "$id": 4,
+                    "$type": "3|System.Collections.Generic.List`1[[GameFrame.YAssetManage.PrefabsManage.SerializableComponent, Assembly-CSharp]], mscorlib",
+                    "$rlength": 4,
+                    "$rcontent": [
+                        {
+                            "$id": 5,
+                            "$type": "4|GameFrame.YAssetManage.PrefabsManage.SerializableComponent, Assembly-CSharp",
+                            "type": "UnityEngine.Transform",
+                            "fields": {
+                                "$id": 6,
+                                "$type": "5|System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[System.Object, mscorlib]], mscorlib",
+                                "comparer": {
+                                    "$id": 7,
+                                    "$type": "6|System.Collections.Generic.GenericEqualityComparer`1[[System.String, mscorlib]], mscorlib"
+                                },
+                                "$rlength": 0,
+                                "$rcontent": [
+                                ]
+                            }
+                        },
+                        {
+                            "$id": 8,
+                            "$type": 4,
+                            "type": "UnityEngine.MeshFilter",
+                            "fields": {
+                                "$id": 9,
+                                "$type": 5,
+                                "comparer": $iref:7,
+                                "$rlength": 0,
+                                "$rcontent": [
+                                ]
+                            }
+                        },
+                        {
+                            "$id": 10,
+                            "$type": 4,
+                            "type": "UnityEngine.MeshRenderer",
+                            "fields": {
+                                "$id": 11,
+                                "$type": 5,
+                                "comparer": $iref:7,
+                                "$rlength": 0,
+                                "$rcontent": [
+                                ]
+                            }
+                        },
+                        {
+                            "$id": 12,
+                            "$type": 4,
+                            "type": "UnityEngine.CapsuleCollider",
+                            "fields": {
+                                "$id": 13,
+                                "$type": 5,
+                                "comparer": $iref:7,
+                                "$rlength": 0,
+                                "$rcontent": [
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        ]
+    }
+}

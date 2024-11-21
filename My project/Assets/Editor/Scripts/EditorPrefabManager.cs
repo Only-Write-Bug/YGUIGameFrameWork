@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using common;
 using GameFrame.YAssetManage.PrefabsManage;
 using UnityEditor;
 using UnityEngine;
@@ -13,6 +15,15 @@ namespace Editor.Scripts
         {
             var selectedObjects = Selection.objects;
 
+            if (selectedObjects == null || selectedObjects.Length <= 0)
+            {
+                return;
+            }
+            
+            var jsonSaveRootPath = Path.Combine(Directory.GetCurrentDirectory(),
+                GlobalConstants.ASSET_SHARED_PREFABS_PATH);
+            IOUtil.CheckPath(jsonSaveRootPath);
+
             foreach (var selectedObject in selectedObjects)
             {
                 var path = AssetDatabase.GetAssetPath(selectedObject);
@@ -20,7 +31,9 @@ namespace Editor.Scripts
                 if (!AssetDatabase.IsValidFolder(path) && Path.GetExtension(path).ToLower() == ".prefab")
                 {
                     var content = PrefabSerializer.Serialize(selectedObject as GameObject, path);
-                    AssetUtil.GenerateAssetKey(path);
+                    var assetKey = AssetUtil.GenerateAssetKey(path);
+                    var jsonPath = Path.Combine(jsonSaveRootPath, assetKey + ".json");
+                    IOUtil.WriteContentToFile(jsonPath, content);
                 }
                 else
                 {
