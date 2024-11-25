@@ -138,7 +138,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
                         catch (Exception e)
                         {
                             Logger.Warn(
-                                $"Set Component Field has failed, field name:{targetField.Name}, Type:{componentData.type}, go name:{go.name}, parent:{go.transform.parent.name}");
+                                $"Set Component Field has failed, cause:{e.Message}, field name:{targetField.Name}, Type:{componentData.type}, go name:{go.name}, parent:{go.transform.parent.name}");
                         }
                     }
                 }
