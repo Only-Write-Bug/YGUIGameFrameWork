@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using OdinSerializer;
 using UnityEngine;
+using UnityEngine.Serialization;
+using util;
 using Object = UnityEngine.Object;
 
 namespace GameFrame.YAssetManage.PrefabsManage
@@ -12,6 +14,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
         public string prefabName;
         public string prefabPath;
         public List<SerializableGameObject> children = new List<SerializableGameObject>();
+        public List<SerializableComponent> components = new List<SerializableComponent>();
     }
 
     [Serializable]
@@ -27,6 +30,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
     {
         public string type;
         public Dictionary<string, object> fields = new Dictionary<string, object>();
+        public Dictionary<string, object> properties = new Dictionary<string, object>();
     }
 
     public static class PrefabSerializer
@@ -37,7 +41,8 @@ namespace GameFrame.YAssetManage.PrefabsManage
             {
                 prefabName = go.name,
                 prefabPath = path,
-                children = serializeGameObjects(go)
+                children = serializeGameObjects(go),
+                components = serializeComponents(go)
             };
 
             return System.Text.Encoding.UTF8.GetString(
@@ -84,6 +89,15 @@ namespace GameFrame.YAssetManage.PrefabsManage
                     serializedComponent.fields[field.Name] = field.GetValue(component);
                 }
 
+                // foreach (var property in component.GetType().GetProperties())
+                // {
+                //     if (!property.CanRead || property.GetIndexParameters().Length > 0 ||
+                //         property.GetCustomAttributes(typeof(System.ObsoleteAttribute), true).Length > 0)
+                //         continue;
+                //
+                //     serializedComponent.properties[property.Name] = property.GetValue(component);
+                // }
+
                 result.Add(serializedComponent);
             }
 
@@ -97,6 +111,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
                     DataFormat.JSON);
 
             var result = new GameObject(serializedPrefab.prefabName);
+            DeserializeComponents(serializedPrefab.components, result);
             DeserializeGameObjects(serializedPrefab.children, result);
 
             return result;
@@ -118,7 +133,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
         {
             foreach (var componentData in components)
             {
-                var type = Type.GetType(componentData.type);
+                var type = ObjectUtil.GetTypeByName(componentData.type);
                 if (type == null)
                 {
                     Logger.Warn(
@@ -126,7 +141,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
                     continue;
                 }
 
-                var component = go.AddComponent(type);
+                var component = go.TryGetComponent(type, out var curComponent) ? curComponent : go.AddComponent(type);
                 foreach (var targetField in type.GetFields())
                 {
                     if (componentData.fields.TryGetValue(targetField.Name, out var value))
@@ -142,6 +157,25 @@ namespace GameFrame.YAssetManage.PrefabsManage
                         }
                     }
                 }
+
+                // foreach (var targetProperty in type.GetProperties())
+                // {
+                //     if (!targetProperty.CanWrite || targetProperty.GetIndexParameters().Length > 0)
+                //         continue;
+                //
+                //     if (componentData.fields.TryGetValue(targetProperty.Name, out var value))
+                //     {
+                //         try
+                //         {
+                //             targetProperty.SetValue(component, value);
+                //         }
+                //         catch (Exception e)
+                //         {
+                //             Logger.Warn(
+                //                 $"Set Component Property has failed, cause:{e.Message}, property name:{targetProperty.Name}, Type:{componentData.type}, go name:{go.name}, parent:{go.transform.parent.name}");
+                //         }
+                //     }
+                // }
             }
         }
     }

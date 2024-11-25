@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace util
 {
@@ -24,6 +25,22 @@ namespace util
             }
 
             return obj.GetType().GetProperty(propertyName)!.GetValue(obj);
+        }
+
+        public static Type GetTypeByName(string typeName)
+        {
+            var type = Type.GetType(typeName);
+            if (type != null)
+                return type;
+
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = assembly.GetType(typeName);
+                if (type != null)
+                    return type;
+            }
+
+            return null;
         }
     }
 }
