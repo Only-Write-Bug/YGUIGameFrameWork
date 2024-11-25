@@ -34,6 +34,7 @@ namespace Editor.Scripts
                     var assetKey = AssetUtil.GenerateAssetKey(path);
                     var jsonPath = Path.Combine(jsonSaveRootPath, assetKey + ".json");
                     IOUtil.WriteContentToFile(jsonPath, content);
+                    Debug.Log("Export prefab successfully, AssetKey: " + assetKey + ", JSON Path: " + jsonPath);
                 }
                 else
                 {

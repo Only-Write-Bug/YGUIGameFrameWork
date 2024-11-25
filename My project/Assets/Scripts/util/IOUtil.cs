@@ -47,17 +47,14 @@ namespace util
             {
                 if (CheckFile(path))
                 {
-                    // File.WriteAllText(path, content);
-                    using (var stream = File.OpenWrite(path))
+                    using var stream = File.OpenWrite(path);
+                    stream.SetLength(0);
+                    using (var write = new StreamWriter(stream))
                     {
-                        stream.SetLength(0);
-                        using (var write = new StreamWriter(stream))
-                        {
-                            write.Write(content);
-                            write.Close();
-                        }
-                        stream.Close();
+                        write.Write(content);
+                        write.Close();
                     }
+                    stream.Close();
                 }
             }
             catch (IOException ex)
