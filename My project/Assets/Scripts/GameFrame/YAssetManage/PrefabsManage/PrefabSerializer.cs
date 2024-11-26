@@ -9,18 +9,16 @@ using Object = UnityEngine.Object;
 namespace GameFrame.YAssetManage.PrefabsManage
 {
     [Serializable]
-    public class SerializablePrefab
+    public class SerializablePrefab : SerializableGameObject
     {
-        public string prefabName;
         public string prefabPath;
-        public List<SerializableGameObject> children = new List<SerializableGameObject>();
-        public List<SerializableComponent> components = new List<SerializableComponent>();
     }
 
     [Serializable]
     public class SerializableGameObject
     {
         public string name;
+        public SerializableTransformData transform = new SerializableTransformData();
         public List<SerializableGameObject> children = new List<SerializableGameObject>();
         public List<SerializableComponent> components = new List<SerializableComponent>();
     }
@@ -33,17 +31,25 @@ namespace GameFrame.YAssetManage.PrefabsManage
         public Dictionary<string, object> properties = new Dictionary<string, object>();
     }
 
+    [Serializable]
+    public class SerializableTransformData
+    {
+        public float[] localPosition;
+        public float[] localRotation;
+        public float[] localScale;
+    }
+
     public static class PrefabSerializer
     {
         public static string Serialize(GameObject go, string path)
         {
             var serializedPrefab = new SerializablePrefab
             {
-                prefabName = go.name,
+                name = go.name,
                 prefabPath = path,
-                children = serializeGameObjects(go),
-                components = serializeComponents(go)
+                children = serializeGameObjects(go)
             };
+            serializedPrefab.components = serializeComponents(go, serializedPrefab);
 
             return System.Text.Encoding.UTF8.GetString(
                 SerializationUtility.SerializeValue(serializedPrefab, DataFormat.JSON));
@@ -59,15 +65,16 @@ namespace GameFrame.YAssetManage.PrefabsManage
                 {
                     name = child.gameObject.name,
                     children = serializeGameObjects(child.gameObject),
-                    components = serializeComponents(child.gameObject)
                 };
+                serializedGO.components = serializeComponents(child.gameObject, serializedGO);
                 result.Add(serializedGO);
             }
 
             return result;
         }
 
-        private static List<SerializableComponent> serializeComponents(GameObject go)
+        private static List<SerializableComponent> serializeComponents(GameObject go,
+            SerializableGameObject serializableGameObject)
         {
             var result = new List<SerializableComponent>();
 
@@ -75,6 +82,14 @@ namespace GameFrame.YAssetManage.PrefabsManage
             {
                 if (component == null)
                     continue;
+
+                if (component is Transform transform)
+                {
+                    serializableGameObject.transform.localPosition = transform.localPosition.ToArray();
+                    serializableGameObject.transform.localRotation = transform.localRotation.ToArray();
+                    serializableGameObject.transform.localScale = transform.localScale.ToArray();
+                    continue;
+                }
 
                 var serializedComponent = new SerializableComponent
                 {
@@ -110,7 +125,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
                 SerializationUtility.DeserializeValue<SerializablePrefab>(System.Text.Encoding.UTF8.GetBytes(content),
                     DataFormat.JSON);
 
-            var result = new GameObject(serializedPrefab.prefabName);
+            var result = new GameObject(serializedPrefab.name);
             DeserializeComponents(serializedPrefab.components, result);
             DeserializeGameObjects(serializedPrefab.children, result);
 
@@ -177,6 +192,20 @@ namespace GameFrame.YAssetManage.PrefabsManage
                 //     }
                 // }
             }
+        }
+
+        private static void ResetTransform(GameObject go, SerializableTransformData data)
+        {
+            var transform = go.GetComponent(typeof(Transform)) as Transform;
+            if (transform == null)
+            {
+                Logger.Warn($"not found transform, GameObject name:{go.name}");
+                return;
+            }
+
+            transform.localPosition = TransformUtil.ArrayToVector3(data.localPosition);
+            transform.localRotation = TransformUtil.ArrayToQuaternion(data.localRotation);
+            transform.localScale = TransformUtil.ArrayToVector3(data.localScale);
         }
     }
 }
