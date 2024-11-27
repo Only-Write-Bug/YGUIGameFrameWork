@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using OdinSerializer;
 using UnityEngine;
-using UnityEngine.Serialization;
 using util;
 using Object = UnityEngine.Object;
 
@@ -126,9 +125,11 @@ namespace GameFrame.YAssetManage.PrefabsManage
                     DataFormat.JSON);
 
             var result = new GameObject(serializedPrefab.name);
+            ResetTransform(result, serializedPrefab.transform);
             DeserializeComponents(serializedPrefab.components, result);
             DeserializeGameObjects(serializedPrefab.children, result);
 
+            Logger.Log("Generated prefab successfully, prefab name: " + serializedPrefab.name);
             return result;
         }
 
@@ -138,6 +139,7 @@ namespace GameFrame.YAssetManage.PrefabsManage
             {
                 var go = new GameObject(child.name);
                 go.transform.SetParent(root.transform, false);
+                ResetTransform(go, child.transform);
 
                 DeserializeComponents(child.components, go);
                 DeserializeGameObjects(child.children, go);
