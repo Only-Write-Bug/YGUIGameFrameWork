@@ -17,9 +17,6 @@ namespace Editor.Scripts
     
     public class YGUISetting : EditorWindow
     {
-        private const int DEFAULT_TITTLE_FONT_SIZE = 20;
-        private const int DEFAULT_ITEM_FONT_SIZE = 15;
-        
         private YGUISettingData _data = LocalSettingsUtil.LoadSettings<YGUISettingData>(ESettingsFilePath.YGUI);
         
         [MenuItem("YGUI/Settings")]
@@ -31,29 +28,42 @@ namespace Editor.Scripts
         private void CreateGUI()
         {
             var root = rootVisualElement;
-            root.style.flexDirection = FlexDirection.Column;
-            root.style.alignItems = Align.Center;
+
+            var scrollView = new ScrollView(ScrollViewMode.Vertical)
+            {
+                style =
+                {
+                    flexGrow = 1,
+                    flexShrink = 1,
+                    flexBasis = 0,
+                    alignItems = Align.Center,
+                    alignSelf = Align.Center,
+                    paddingLeft = Length.Percent(10),
+                    paddingRight = Length.Percent(10)
+                }
+            };
+            scrollView.Add(InitAssetBundleSettings());
+            scrollView.Add(InitSaveBtn());
             
-            root.Add(InitAssetBundleSettings());
-            root.Add(InitSaveBtn());
+            root.Add(scrollView);
         }
 
         private VisualElement InitAssetBundleSettings()
         {
-            var container = CreateBox();
+            var container = UIToolKitUtil.CreateBox();
             
-            container.Add(CreateTittle("AssetBundle Settings"));
+            container.Add(UIToolKitUtil.CreateTittle("AssetBundle Settings"));
 
             //资产路径
-            var assetsPathContainer = CreateContainer();
-            assetsPathContainer.Add(CreateItemName("Assets Path:"));
+            var assetsPathContainer = UIToolKitUtil.CreateContainer();
+            assetsPathContainer.Add(UIToolKitUtil.CreateItemName("Assets Path:"));
             var assetLabel = new Label
             {
                 text = _data.labels.TryGetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, out var assetPath) ? assetPath : "",
-                style = { fontSize = DEFAULT_ITEM_FONT_SIZE, }
+                style = { fontSize = UIToolKitUtil.DEFAULT_ITEM_FONT_SIZE, }
             };
             assetsPathContainer.Add(assetLabel);
-            assetsPathContainer.Add(CreateItemButton("Modify", () =>
+            assetsPathContainer.Add(UIToolKitUtil.CreateItemButton("Modify", () =>
             {
                 assetLabel.text = EditorUtility.OpenFolderPanel("select asset folder", "", "");
                 _data.labels.SetValue(GlobalConstants.YGUI_SELECT_ASSET_FOLDER_PATH, assetLabel.text);
@@ -61,15 +71,15 @@ namespace Editor.Scripts
             container.Add(assetsPathContainer);
             
             //存储AB包路径
-            var assetBundlePathContainer = CreateContainer();
-            assetBundlePathContainer.Add(CreateItemName("AssetBundle Path:"));
+            var assetBundlePathContainer = UIToolKitUtil.CreateContainer();
+            assetBundlePathContainer.Add(UIToolKitUtil.CreateItemName("AssetBundle Path:"));
             var abLabel = new Label
             {
                 text = _data.labels.TryGetValue(GlobalConstants.YGUI_ASSET_BUNDLE_PATH, out var abPath) ? abPath : "",
-                style = { fontSize = DEFAULT_ITEM_FONT_SIZE, }
+                style = { fontSize = UIToolKitUtil.DEFAULT_ITEM_FONT_SIZE, }
             };
             assetBundlePathContainer.Add(abLabel);
-            assetBundlePathContainer.Add(CreateItemButton("Modify", () =>
+            assetBundlePathContainer.Add(UIToolKitUtil.CreateItemButton("Modify", () =>
             {
                 abLabel.text = EditorUtility.OpenFolderPanel("select AssetBundle Save folder", "", "");
                 _data.labels.SetValue(GlobalConstants.YGUI_ASSET_BUNDLE_PATH, abLabel.text);
@@ -94,11 +104,11 @@ namespace Editor.Scripts
                 {
                     width = Length.Percent(50),
                     height = 20,
-                    fontSize = DEFAULT_ITEM_FONT_SIZE
+                    fontSize = UIToolKitUtil.DEFAULT_ITEM_FONT_SIZE
                 }
             });
             
-            container.Add(CreateUnderLine());
+            container.Add(UIToolKitUtil.CreateUnderLine());
             
             return container;
         }
@@ -118,87 +128,6 @@ namespace Editor.Scripts
                     height = 25,
                     paddingTop = 5,
                     paddingBottom = 5,
-                }
-            };
-        }
-
-        private VisualElement CreateBox()
-        {
-            return new VisualElement
-            {
-                style =
-                {
-                    flexDirection = FlexDirection.Column,
-                    alignItems = Align.Center,
-                    width = Length.Percent(90)
-                }
-            };
-        }
-
-        private VisualElement CreateContainer()
-        {
-            return new VisualElement
-            {
-                style =
-                {
-                    flexDirection = FlexDirection.Row,
-                    alignItems = Align.Center
-                }
-            };
-        }
-
-        private Label CreateTittle(string content)
-        {
-            return new Label
-            {
-                text = content,
-                style =
-                {
-                    fontSize = DEFAULT_TITTLE_FONT_SIZE,
-                    color = Color.white
-                }
-            };
-        }
-
-        private Label CreateItemName(string name)
-        {
-            return new Label
-            {
-                text = name,
-                style =
-                {
-                    fontSize = DEFAULT_ITEM_FONT_SIZE,
-                    backgroundColor = Color.white,
-                    color = Color.black
-                }
-            };
-        }
-
-        private Button CreateItemButton(string content, Action callback)
-        {
-            return new Button(() => callback?.Invoke())
-            {
-                text = content,
-                style =
-                {
-                    width = 50,
-                    height = 20,
-                }
-            };
-        }
-
-        private VisualElement CreateUnderLine()
-        {
-            return new VisualElement()
-            {
-                style =
-                {
-                    height = 2,
-                    backgroundColor = Color.white,
-                    marginTop = 3,
-                    marginBottom = 3,
-                    flexGrow = 1,
-                    width = Length.Percent(100)
                 }
             };
         }
