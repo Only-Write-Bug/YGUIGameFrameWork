@@ -29,7 +29,7 @@ namespace util
                 try
                 {
                     CheckPath(Path.GetDirectoryName(path));
-                    File.Create(path);
+                    File.Create(path).Close();
                 }
                 catch (Exception e)
                 {
@@ -59,11 +59,11 @@ namespace util
             }
             catch (IOException ex)
             {
-                Logger.Warn($"File access conflicts: {ex.Message}");
+                Logger.Error($"File access conflicts: {ex.Message}");
             }
             catch (Exception ex)
             {
-                Logger.Warn($"There was an error writing to the file: {ex.Message}");
+                Logger.Error($"There was an error writing to the file: {ex.Message}");
             }
         }
 
