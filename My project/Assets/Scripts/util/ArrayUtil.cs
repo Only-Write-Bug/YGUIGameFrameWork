@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace util
 {
@@ -51,6 +52,21 @@ namespace util
             }
 
             return true;
+        }
+
+        public static Queue<T> ToQueue<T>(this IList<T> ary, bool isPositiveOrder = true)
+        {
+            if (!isPositiveOrder)
+                ary = (IList<T>)ary.Reverse();
+
+            var result = new Queue<T>();
+
+            foreach (var element in ary)
+            {
+                result.Enqueue(element);
+            }
+            
+            return result;
         }
     }
 }
